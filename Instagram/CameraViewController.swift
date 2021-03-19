@@ -11,7 +11,8 @@ import Parse
 
 class CameraViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
-    @IBOutlet var commentField: UILabel!
+    @IBOutlet weak var commentField: UITextField!
+    
     @IBOutlet var imageView: UIImageView!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,7 +21,7 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
     }
     
     @IBAction func onSubmit(_ sender: Any) {
-        let post = PFObject(className: "Post")
+        let post = PFObject(className: "Posts")
         post["caption"] = commentField.text!
         post["author"] = PFUser.current()!
         let imageData = imageView.image!.pngData()
@@ -33,7 +34,7 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
                 print("Saved!")
                 
             } else {
-                
+                print("error!")
             }
         }
         
@@ -64,7 +65,7 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
         let image = info[.editedImage] as! UIImage
         
         let size = CGSize(width: 300, height: 300)
-        let scaledImage = image.af.imageScaled(to: size)
+        let scaledImage = image.af.imageAspectScaled(toFit: size)
         imageView.image = scaledImage
         dismiss(animated: true, completion: nil)
         
